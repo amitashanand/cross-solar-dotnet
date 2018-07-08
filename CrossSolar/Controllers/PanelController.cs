@@ -20,6 +20,11 @@ namespace CrossSolar.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] PanelModel value)
         {
+
+            if (value.Serial.Length != 16)
+            {
+                return BadRequest("Invalid Serial Number");
+            }
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var panel = new Panel

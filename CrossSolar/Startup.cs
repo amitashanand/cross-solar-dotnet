@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace CrossSolar
 {
@@ -21,6 +22,10 @@ namespace CrossSolar
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1.0", new Info { Title = "CrossSolar API", Version = "v1.0" });
+            });
             services.AddDbContext<CrossSolarDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IPanelRepository, PanelRepository>();
@@ -36,6 +41,12 @@ namespace CrossSolar
             {
                 app.UseDeveloperExceptionPage();
                 app.UseHttpStatusCodeExceptionMiddleware();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "Versioned API v1.0");
+                    c.DocExpansion(DocExpansion.List);
+                });
             }
             else
             {

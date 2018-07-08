@@ -54,6 +54,21 @@ namespace CrossSolar.Controllers
         {
             var result = new List<OneDayElectricityModel>();
 
+            var analytics = await _analyticsRepository.Query()
+                .Where(x => x.PanelId.Equals(panelId, StringComparison.CurrentCultureIgnoreCase)).ToListAsync();
+
+            var result1 = analytics.GroupBy(g => g.DateTime)
+                .Select(i => new OneDayElectricityModel
+                {
+                    Sum = i.Count(),
+                    Average = i.Average(g => g.KiloWatt),
+                    Minimum = i.Min(g => g.KiloWatt),
+                    Maximum = i.Max(g => g.KiloWatt),
+
+                })
+                    ;
+            result = result1.ToList();
+
             return Ok(result);
         }
 

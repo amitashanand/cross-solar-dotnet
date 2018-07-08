@@ -42,5 +42,24 @@ namespace CrossSolar.Tests.Controller
             Assert.NotNull(createdResult);
             Assert.Equal(201, createdResult.StatusCode);
         }
+        [Fact]
+        public async Task ReturnsBadRequestWhenSerialNumberInvalid()
+        {
+            // Arrange
+            var panel = new PanelModel
+            {
+                Brand = "Areva",
+                Latitude = 12.345678,
+                Longitude = 98.7655432,
+                Serial = "AAAA11B222" //invalid serial no
+            };          
+
+            // Act
+            var result = await _panelController.Register(panel);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<BadRequestObjectResult>(result); 
+        }
     }
 }
