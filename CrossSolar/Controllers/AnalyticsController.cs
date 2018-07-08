@@ -63,10 +63,9 @@ namespace CrossSolar.Controllers
                     Sum = i.Count(),
                     Average = i.Average(g => g.KiloWatt),
                     Minimum = i.Min(g => g.KiloWatt),
-                    Maximum = i.Max(g => g.KiloWatt),
+                    Maximum = i.Max(g => g.KiloWatt), 
 
-                })
-                    ;
+                });
             result = result1.ToList();
 
             return Ok(result);
